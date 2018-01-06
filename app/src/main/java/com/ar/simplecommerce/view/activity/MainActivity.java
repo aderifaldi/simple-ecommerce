@@ -80,14 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 if (data != null) {
                     if (data.getStatus().equals(Constant.SUCCESS)) {
 
-                        for (int i = 0; i < data.getProducts().size(); i++) {
-                            adapter.getData().add(data.getProducts().get(i));
-                            adapter.notifyItemInserted(adapter.getData().size() - 1);
-                        }
-
-                        adapter.notifyDataSetChanged();
-
-                        CacheManager.storeCache(cacheDB, Constant.CACHE_PRODUCT, new Gson().toJson(data));
+                        storeDataToList(data);
 
                     } else {
                         if (data.getMessage() != null) {
@@ -103,6 +96,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void storeDataToList(ModelProductList data){
+        adapter.getData().clear();
+
+        for (int i = 0; i < data.getProducts().size(); i++) {
+            adapter.getData().add(data.getProducts().get(i));
+            adapter.notifyItemInserted(adapter.getData().size() - 1);
+        }
+
+        adapter.notifyDataSetChanged();
+
+        CacheManager.storeCache(cacheDB, Constant.CACHE_PRODUCT, new Gson().toJson(data));
     }
 
 }
