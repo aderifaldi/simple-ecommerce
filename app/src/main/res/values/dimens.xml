@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="appbar_height">56dp</dimen>
+    <dimen name="padding_normal">16dp</dimen>
+    <dimen name="margin_medium">8dp</dimen>
+    <dimen name="margin_normal">16dp</dimen>
+    <dimen name="splash_logo_size">100dp</dimen>
+    <dimen name="padding_medium">8dp</dimen>
+</resources>
