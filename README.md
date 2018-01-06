@@ -3,7 +3,7 @@ Simple e-commerce app use mvvm-live and repository pattern
 
 Pattern:
 - android livecycle architecture (mvvm, live data)
-- repository
+- repository pattern
 
 Library:
 - retrofit (http request)
