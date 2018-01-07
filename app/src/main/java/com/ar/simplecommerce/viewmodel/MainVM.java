@@ -17,9 +17,7 @@ import com.ar.simplecommerce.model.api.ApiResponse;
 
 public class MainVM extends ViewModel {
 
-    private ProgressDialog pd;
     private MediatorLiveData<ApiResponse> data;
-    private boolean isCancelable;
 
     public LiveData<ApiResponse> getData() {
         return data;
@@ -27,18 +25,11 @@ public class MainVM extends ViewModel {
 
     public void getProductList(final Activity activity, final CacheDB cacheDB, final int cacheType) {
 
-        isCancelable = false;
-
         data = new MediatorLiveData<>();
-        pd = AppUtility.showLoading(pd, activity, isCancelable);
 
         new GetProductList(activity, cacheDB, cacheType) {
             @Override
             public void onFinishRequest(LiveData<ApiResponse> r) {
-
-                if (pd != null) {
-                    pd.dismiss();
-                }
 
                 data.setValue(r.getValue());
 

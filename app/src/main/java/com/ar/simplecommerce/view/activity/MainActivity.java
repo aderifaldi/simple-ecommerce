@@ -7,11 +7,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
 
 import com.ar.simplecommerce.R;
 import com.ar.simplecommerce.data.cache.CacheDB;
@@ -33,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.scrollUpButon)
     FloatingActionButton scrollUpButon;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
 
     private RecyclerView listProduct;
     private ProductListAdapter adapter;
@@ -97,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
         viewModel.getData().observe(this, new Observer<ApiResponse>() {
             @Override
             public void onChanged(@Nullable ApiResponse apiResponse) {
+                progressBar.setVisibility(View.GONE);
 
                 ModelProductList data = (ModelProductList) apiResponse.getData();
 
@@ -104,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
                     if (data.getStatus().equals(Constant.SUCCESS)) {
 
                         storeDataToList(data);
+                        scrollUpButon.setVisibility(View.VISIBLE);
 
                     } else {
                         if (data.getMessage() != null) {
