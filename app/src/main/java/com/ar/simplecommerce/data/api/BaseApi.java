@@ -21,12 +21,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public abstract class BaseApi {
 
-    static final String BASE_URL = Constant.BASE_URL;
-    static final int TIMEOUT = 60;
-
     ApiService apiService;
 
-    public BaseApi() {
+    BaseApi() {
 
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
@@ -36,14 +33,14 @@ public abstract class BaseApi {
         logInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        builder.readTimeout(TIMEOUT, TimeUnit.SECONDS);
-        builder.connectTimeout(TIMEOUT, TimeUnit.SECONDS);
+        builder.readTimeout(Constant.Api.TIMEOUT, TimeUnit.SECONDS);
+        builder.connectTimeout(Constant.Api.TIMEOUT, TimeUnit.SECONDS);
         builder.addInterceptor(logInterceptor);
 
         OkHttpClient okHttpClient = builder.build();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(Constant.Api.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(okHttpClient).build();
 

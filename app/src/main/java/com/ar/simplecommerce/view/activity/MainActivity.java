@@ -30,12 +30,15 @@ import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
 
+    //Todo: View binding use ButterKnife
     @BindView(R.id.scrollUpButon)
     FloatingActionButton scrollUpButon;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
 
+    //Todo: Declaration variable
     private RecyclerView listProduct;
+
     private ProductListAdapter adapter;
     private LinearLayoutManagerWithSmoothScroller linearLayoutManager;
 
@@ -49,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        //Todo: Initialize variable
         activity = MainActivity.this;
 
         viewModel = ViewModelProviders.of(this).get(MainVM.class);
@@ -59,11 +63,16 @@ public class MainActivity extends AppCompatActivity {
         linearLayoutManager = new LinearLayoutManagerWithSmoothScroller(activity);
         adapter = new ProductListAdapter(activity);
 
+        //Todo: Set layout manager of RecyclerView
         listProduct.setLayoutManager(linearLayoutManager);
+
+        //Todo: Set adapter of RecyclerView
         listProduct.setAdapter(adapter);
 
+        //Todo: Execute method loadApiResponse
         loadApiResponse();
 
+        //Todo: Set on item click listener of list
         adapter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -72,13 +81,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Todo: Add scroll listener of RecyclerView
         listProduct.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (dy > 0 && scrollUpButon.getVisibility() == View.VISIBLE) {
+                    //Hide floating button when scroll up
                     scrollUpButon.hide();
                 } else if (dy < 0 && scrollUpButon.getVisibility() != View.VISIBLE) {
+                    //Show floating button when scroll down
                     scrollUpButon.show();
                 }
             }
@@ -94,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void loadApiResponse() {
 
-        viewModel.getProductList(activity, cacheDB, Constant.CACHE_PRODUCT);
+        viewModel.getProductList(activity, cacheDB, Constant.Cache.PRODUCT);
         viewModel.getData().observe(this, new Observer<ApiResponse>() {
             @Override
             public void onChanged(@Nullable ApiResponse apiResponse) {
@@ -103,9 +115,11 @@ public class MainActivity extends AppCompatActivity {
                 ModelProductList data = (ModelProductList) apiResponse.getData();
 
                 if (data != null) {
-                    if (data.getStatus().equals(Constant.SUCCESS)) {
+                    if (data.getStatus().equals(Constant.Api.SUCCESS)) {
 
+                        //Todo: Store data to list
                         storeDataToList(data);
+                        //Todo: Hide progress bar
                         scrollUpButon.setVisibility(View.VISIBLE);
 
                     } else {
@@ -125,20 +139,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void storeDataToList(ModelProductList data) {
+        //Todo: Clear list
         adapter.getData().clear();
 
+        //Todo: Add data to adapter
         for (int i = 0; i < data.getProducts().size(); i++) {
             adapter.getData().add(data.getProducts().get(i));
             adapter.notifyItemInserted(adapter.getData().size() - 1);
         }
 
+        //Todo: Notify adapter when data updated
         adapter.notifyDataSetChanged();
 
-        CacheManager.storeCache(cacheDB, Constant.CACHE_PRODUCT, new Gson().toJson(data));
+        //Todo: Store data to cache
+        CacheManager.storeCache(cacheDB, Constant.Cache.PRODUCT, new Gson().toJson(data));
     }
 
     @OnClick(R.id.scrollUpButon)
     public void onViewClicked() {
+        //Todo: Scroll RecyclerView to top
         listProduct.smoothScrollToPosition(0);
     }
 }
